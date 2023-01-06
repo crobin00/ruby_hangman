@@ -27,9 +27,8 @@ class Hangman
     p current_guess
     return true if found_letter
 
-    # If after loop input not in current guess,
-    # then the guess was incorrect
-    guessed_incorrect_letters.push(user_input) unless current_guess.include?(user_input)
+    # If letter not found, add to incorrect letters
+    guessed_incorrect_letters.push(user_input)
     p guessed_incorrect_letters
     p current_guess
     false
