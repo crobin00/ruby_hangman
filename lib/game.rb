@@ -30,8 +30,12 @@ class Game
         break
       end
 
+      print_all_guesses
+      print_guesses_remaining
+      print_current_guess
+
       # Next iteration if not out of guesses else break
-      next unless hangman.amount_guesses_remaining.zero?
+      next unless hangman.guesses_remaining.zero?
 
       print_out_of_guesses
       break
@@ -39,6 +43,14 @@ class Game
   end
 
   private
+
+  def print_all_guesses
+    puts "Letters guessed: #{hangman.all_guesses_string}"
+  end
+
+  def print_current_guess
+    puts hangman.current_guess_string
+  end
 
   def print_guess_feedback(user_input)
     if hangman.make_guess(user_input)
@@ -55,10 +67,10 @@ class Game
   end
 
   def print_guesses_remaining
-    if hangman.amount_guesses_remaining == 1
+    if hangman.guesses_remaining == 1
       puts 'Last guess!'
     else
-      puts "Incorrect guesses remaining: #{hangman.amount_guesses_remaining}"
+      puts "Incorrect guesses remaining: #{hangman.guesses_remaining}"
     end
   end
 
