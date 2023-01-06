@@ -22,6 +22,8 @@ class Game
         next
       end
 
+      print_guess_feedback(user_input)
+
       # Guessed correct word
       if hangman.guessed_word?
         puts 'You guessed the word!'
@@ -37,6 +39,14 @@ class Game
   end
 
   private
+
+  def print_guess_feedback(user_input)
+    if hangman.make_guess(user_input)
+      puts 'Good guess!'
+    else
+      puts 'Incorrect guess!'
+    end
+  end
 
   def print_out_of_guesses
     puts 'Out of guesses!'
