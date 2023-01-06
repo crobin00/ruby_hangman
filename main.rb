@@ -28,15 +28,26 @@ get_all_words(valid_words)
 
 current_word =  valid_words.sample.split('')
 current_guess = Array.new(current_word.length, '-')
+guessed_incorrect_letters = []
 p current_word
 while current_guess != current_word
   user_input = input
+
+  if current_guess.include?(user_input) || guessed_incorrect_letters.include?(user_input)
+    puts 'You already guessed that letter. Try again.'
+    next
+  end
 
   current_word.each_with_index do |char, idx|
     if char == user_input
       current_guess[idx] = char
     end
   end
+  unless current_guess.include?(user_input)
+    puts 'Incorrect guess'
+    guessed_incorrect_letters.push(user_input)
+  end
+  p guessed_incorrect_letters
   p current_guess
 end
 
