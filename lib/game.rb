@@ -11,6 +11,8 @@ class Game
   end
 
   def run
+    print_welcome
+
     until hangman.game_over?
       user_input = input
       puts
@@ -43,6 +45,10 @@ class Game
   end
 
   private
+
+  def print_welcome
+    puts 'Welcome to Hangman! Type \'quit\' at any time if you wish to stop playing.'
+  end
 
   def print_all_guesses
     puts "Letters guessed: #{hangman.all_guesses_string}"
