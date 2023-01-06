@@ -30,15 +30,15 @@ class Game
         break
       end
 
+      # Break if out of guesses
+      if hangman.guesses_remaining.zero?
+        print_out_of_guesses
+        break
+      end
+
       print_all_guesses
       print_guesses_remaining
       print_current_guess
-
-      # Next iteration if not out of guesses else break
-      next unless hangman.guesses_remaining.zero?
-
-      print_out_of_guesses
-      break
     end
   end
 
