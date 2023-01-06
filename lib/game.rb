@@ -22,18 +22,6 @@ class Game
         next
       end
 
-      if hangman.make_guess(user_input)
-        puts 'Good guess!'
-      else
-        puts 'Incorrect guess.'
-      end
-
-      if hangman.amount_guesses_remaining == 1
-        puts 'Last guess!'
-      else
-        puts "Incorrect guesses remaining: #{hangman.amount_guesses_remaining}"
-      end
-
       # Guessed correct word
       if hangman.guessed_word?
         puts 'You guessed the word!'
@@ -43,14 +31,26 @@ class Game
       # Next iteration if not out of guesses else break
       next unless hangman.amount_guesses_remaining.zero?
 
-      puts 'Out of guesses!'
-      puts 'Correct word was:'
-      puts hangman.current_word_string
+      print_out_of_guesses
       break
     end
   end
 
   private
+
+  def print_out_of_guesses
+    puts 'Out of guesses!'
+    puts 'Correct word was:'
+    puts hangman.current_word_string
+  end
+
+  def print_guesses_remaining
+    if hangman.amount_guesses_remaining == 1
+      puts 'Last guess!'
+    else
+      puts "Incorrect guesses remaining: #{hangman.amount_guesses_remaining}"
+    end
+  end
 
   def input
     loop do
