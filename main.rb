@@ -14,4 +14,13 @@ def input
   end
 end
 
-puts input
+valid_words = []
+
+word_file = File.readlines('english-no-swears.txt', chomp: true)
+word_file.each do |line|
+  if line.length >= 5 && line.length <= 12
+    valid_words.push(line)
+  end
+end
+
+puts valid_words.sample
