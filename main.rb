@@ -14,13 +14,30 @@ def input
   end
 end
 
-valid_words = []
-
-word_file = File.readlines('english-no-swears.txt', chomp: true)
-word_file.each do |line|
-  if line.length >= 5 && line.length <= 12
-    valid_words.push(line)
+def get_all_words(valid_words_arr)
+  word_file = File.readlines('english-no-swears.txt', chomp: true)
+  word_file.each do |line|
+    if line.length >= 5 && line.length <= 12
+      valid_words_arr.push(line)
+    end
   end
 end
 
-puts valid_words.sample
+valid_words = []
+get_all_words(valid_words)
+
+current_word =  valid_words.sample.split('')
+current_guess = Array.new(current_word.length, '-')
+p current_word
+while current_guess != current_word
+  user_input = input
+
+  current_word.each_with_index do |char, idx|
+    if char == user_input
+      current_guess[idx] = char
+    end
+  end
+  p current_guess
+end
+
+
