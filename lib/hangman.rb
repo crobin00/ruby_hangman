@@ -3,7 +3,7 @@
 # Class for Hangman
 class Hangman
   attr_accessor :valid_words, :current_word, :current_guess,
-                :guessed_incorrect_letters
+                :guessed_incorrect_letters, :guesses_remaining
 
   def initialize
     @valid_words = []
@@ -11,6 +11,7 @@ class Hangman
     @current_word = valid_words.sample.split('')
     @current_guess = Array.new(current_word.length, '-')
     @guessed_incorrect_letters = []
+    @guesses_remaining = 7
     p current_word
   end
 
@@ -23,19 +24,31 @@ class Hangman
         found_letter = true
       end
     end
-    p guessed_incorrect_letters
-    p current_guess
     return true if found_letter
 
     # If letter not found, add to incorrect letters
     guessed_incorrect_letters.push(user_input)
-    p guessed_incorrect_letters
-    p current_guess
     false
+  end
+
+  def game_over?
+    guessed_word? || amount_guesses_remaining.zero?
+  end
+
+  def guessed_word?
+    current_guess == current_word
   end
 
   def previously_guessed?(user_input)
     current_guess.include?(user_input) || guessed_incorrect_letters.include?(user_input)
+  end
+
+  def amount_guesses_remaining
+    guesses_remaining - guessed_incorrect_letters.length
+  end
+
+  def current_word_string
+    @current_word.join('')
   end
 
   private
