@@ -4,6 +4,8 @@ This is my Ruby implementation of the Hangman. This project is part of the [The 
 
 ![Hangman Terminal Image](hangman.png)
 
+[![Run on Repl.it](https://replit.com/badge/github/@christanr00/rubyhangman)](https://replit.com/@christanr00/rubyhangman)
+
 ## Installation
 
 ```bash
