@@ -3,30 +3,31 @@
 require_relative 'files'
 require_relative 'formatting'
 
+# Module for display
 module Display
   def self.print_welcome
     <<~HEREDOC
 
-    Welcome to Hangman! Type '#{Formatting.red('quit')}' at any time if you wish to stop playing.
-    While playing, enter '#{Formatting.blue('save')}' to save the current game to come back later.
+      Welcome to Hangman! Type '#{Formatting.red('quit')}' at any time if you wish to stop playing.
+      While playing, enter '#{Formatting.blue('save')}' to save the current game to come back later.
 
     HEREDOC
   end
 
   def self.ask_load_previous
     <<~HEREDOC
-    Would you like to load a previous game?
-    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
+      Would you like to load a previous game?
+      Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}':#{' '}
     HEREDOC
   end
 
   def self.current_save_files
     <<~HEREDOC
 
-    Here are your current save files:
-    #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
-    What is the file you would like to load?
-    Enter a #{Formatting.cyan('file name')} or '#{Formatting.cyan('new')}' to start a new game: 
+      Here are your current save files:
+      #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
+      What is the file you would like to load?
+      Enter a #{Formatting.cyan('file name')} or '#{Formatting.cyan('new')}' to start a new game:#{' '}
 
     HEREDOC
   end
@@ -45,8 +46,8 @@ module Display
 
   def self.play_again
     <<~HEREDOC
-    Would you like to play again?
-    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
+      Would you like to play again?
+      Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}':#{' '}
     HEREDOC
   end
 
@@ -56,9 +57,9 @@ module Display
 
   def self.file_invalid
     <<~HEREDOC
-    Invalid filename. Enter a filename from the following file names.
-    #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
-    Or type '#{Formatting.cyan('new')}' to start a new game or '#{Formatting.red('quit')}' to quit.
+      Invalid filename. Enter a filename from the following file names.
+      #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
+      Or type '#{Formatting.cyan('new')}' to start a new game or '#{Formatting.red('quit')}' to quit.
     HEREDOC
   end
 
@@ -81,8 +82,8 @@ module Display
   def self.no_guesses_remaining(word)
     <<~HEREDOC
 
-    Out of guesses!
-    The correct word was: #{Formatting.bold(Formatting.underline(word))}
+      Out of guesses!
+      The correct word was: #{Formatting.bold(Formatting.underline(word))}
 
     HEREDOC
   end
@@ -90,27 +91,20 @@ module Display
   def self.guessed_word(word)
     <<~HEREDOC
 
-    #{Formatting.bold(Formatting.underline(word))}
-    You correctly guessed the word!
+      #{Formatting.bold(Formatting.underline(word))}
+      You correctly guessed the word!
 
-    HEREDOC
-  end
-
-  def self.play_again
-    <<~HEREDOC
-    Would you like to play again?
-    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
     HEREDOC
   end
 
   def self.all_guesses(all_guesses, current_guess)
     formatted_string = ''
     all_guesses.each_char do |char|
-      if current_guess.include?(char)
-        formatted_string += "#{Formatting.green(char)}"
-      else
-        formatted_string += "#{Formatting.red(char)}"
-      end
+      formatted_string += if current_guess.include?(char)
+                            "#{Formatting.green(char)}"
+                          else
+                            "#{Formatting.red(char)}"
+                          end
     end
     formatted_string
   end

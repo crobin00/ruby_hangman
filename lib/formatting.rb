@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Module for formatting
 module Formatting
   def self.red(string)
     "\e[31m#{string}\e[0m"
