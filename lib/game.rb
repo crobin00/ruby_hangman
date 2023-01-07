@@ -59,7 +59,7 @@ class Game
     end
 
     puts Display.no_guesses_remaining(hangman.current_word_string) if hangman.guesses_remaining.zero?
-    puts Display.guessed_word if hangman.guessed_word?
+    puts Display.guessed_word(hangman.current_guess_string) if hangman.guessed_word?
 
     puts Display.play_again
     user_input = Input.yes_or_no

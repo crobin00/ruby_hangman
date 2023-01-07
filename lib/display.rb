@@ -6,6 +6,7 @@ require_relative 'formatting'
 module Display
   def self.print_welcome
     <<~HEREDOC
+
     Welcome to Hangman! Type '#{Formatting.red('quit')}' at any time if you wish to stop playing.
     While playing, enter '#{Formatting.blue('save')}' to save the current game to come back later.
 
@@ -15,21 +16,23 @@ module Display
   def self.ask_load_previous
     <<~HEREDOC
     Would you like to load a previous game?
-    Enter #{Formatting.green('yes')} or #{Formatting.green('no')}: 
+    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
     HEREDOC
   end
 
   def self.current_save_files
     <<~HEREDOC
+
     Here are your current save files:
     #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
     What is the file you would like to load?
     Enter a #{Formatting.cyan('file name')} or '#{Formatting.cyan('new')}' to start a new game: 
+    
     HEREDOC
   end
 
   def self.random_word_chosen(letters)
-    puts "Your random word has been chosen It has #{letters} letters."
+    "Your random word has been chosen. It has #{Formatting.bold(Formatting.underline(letters))} letters."
   end
 
   def self.letter_input
@@ -54,8 +57,8 @@ module Display
   def self.file_invalid
     <<~HEREDOC
     Invalid filename. Enter a filename from the following file names.
-    #{Files.all_files.join(' ')}
-    Or type 'new' to start a new game or '#{Formatting.red('quit')}' to quit.
+    #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
+    Or type '#{Formatting.cyan('new')}' to start a new game or '#{Formatting.red('quit')}' to quit.
     HEREDOC
   end
 
@@ -73,13 +76,20 @@ module Display
 
   def self.no_guesses_remaining(word)
     <<~HEREDOC
+
     Out of guesses!
-    The correct word was: #{word}
+    The correct word was: #{Formatting.bold(Formatting.underline(word))}
+
     HEREDOC
   end
 
-  def self.guessed_word
-    'You correctly guessed the word!'
+  def self.guessed_word(word)
+    <<~HEREDOC
+
+    #{Formatting.bold(Formatting.underline(word))}
+    You correctly guessed the word!
+
+    HEREDOC
   end
 
   def self.play_again
