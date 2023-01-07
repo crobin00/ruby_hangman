@@ -13,10 +13,26 @@ class Game
   def run
     print_welcome
 
+    file = load_game
+    if file
+      hangman.load_game(file)
+      print_all_guesses
+      print_guesses_remaining
+    else
+      puts 'Your random word has been chosen'
+    end
+
+    print_current_guess
+
     until hangman.game_over?
       user_input = input
       puts
       break if user_input == 'quit'
+
+      if user_input == 'save'
+        hangman.save_game
+        break
+      end
 
       # If input in current guess or incorrect guesses, enter new char
       if hangman.previously_guessed?(user_input)
@@ -82,11 +98,46 @@ class Game
 
   def input
     loop do
-      print 'Enter a letter: '
+      print 'Enter a letter or \'save\' to save current game: '
       user_input = gets.chomp.downcase
-      return user_input if (user_input.length == 1 && alpha?(user_input)) || user_input == 'quit'
+      return user_input if (user_input.length == 1 && alpha?(user_input)) ||
+                           user_input == 'quit' || user_input == 'save'
 
       puts 'Invalid input. Please enter one letter'
+    end
+  end
+
+  def load_game
+    loop do
+      puts 'Would you like to load a previous game?'
+      print 'Enter \'yes\' or \'no\': '
+      user_input = gets.chomp.downcase
+      return false if user_input == 'no'  
+      return get_file if user_input == 'yes'
+      puts 'Invalid input.'
+    end
+  end
+
+  def get_file
+    files_names = []
+    if Dir.empty?('saves')
+      puts 'No saves available'
+      return false
+    end
+
+    puts 'Files: '
+    Dir.each_child('saves') do |file|
+      base_name = File.basename(file, '.yaml')
+      files_names.push(base_name)
+      puts base_name
+    end
+
+    loop do
+      print 'What is the file name?'
+      user_input = gets.chomp.downcase
+      return user_input if files_names.include?(user_input)
+
+      puts 'Invalid file.'
     end
   end
 

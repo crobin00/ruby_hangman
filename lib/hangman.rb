@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 # Class for Hangman
 class Hangman
-  attr_accessor :valid_words, :current_word, :current_guess,
+  attr_accessor :all_words, :valid_words, :current_word, :current_guess,
                 :guesses_remaining, :all_guesses
 
   def initialize
+    @all_words = []
+    read_all_words
     @valid_words = []
     read_all_valid_words
     @current_word = valid_words.sample.split('')
@@ -55,12 +59,44 @@ class Hangman
     all_guesses.join(' ')
   end
 
+  def save_game
+    Dir.mkdir('saves') unless Dir.exist?('saves')
+    name = "#{all_words.sample}_#{all_words.sample}"
+    file_name = "saves/#{name}.yaml"
+    puts "Saved game as: #{name}"
+    File.open(file_name, 'w') do |file|
+      YAML.dump({
+        current_word_string: current_word_string,
+        current_guess_string: current_guess_string,
+        all_guesses_string: all_guesses_string,
+        guesses_remaining: guesses_remaining
+      }, file)
+    end
+  end
+
+  def load_game(file)
+    file_name = "saves/#{file}.yaml"
+    data = YAML.load File.read(file_name)
+    p data
+    self.current_word = data[:current_word_string].split('')
+    self.current_guess = data[:current_guess_string].split('')
+    self.all_guesses = data[:all_guesses_string].split(' ')
+    self.guesses_remaining = data[:guesses_remaining]
+  end
+
   private
 
   def read_all_valid_words
     word_file = File.readlines('english-no-swears.txt', chomp: true)
     word_file.each do |line|
       valid_words.push(line) if line.length >= 5 && line.length <= 12
+    end
+  end
+
+  def read_all_words
+    word_file = File.readlines('english-no-swears.txt', chomp: true)
+    word_file.each do |line|
+      all_words.push(line)
     end
   end
 end
