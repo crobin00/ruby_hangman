@@ -7,7 +7,8 @@ require_relative 'files'
 
 # Class for Game
 class Game
-  attr_reader :hangman, :user_input
+  attr_accessor :hangman
+  attr_reader :user_input
 
   def initialize
     @hangman = Hangman.new
@@ -62,7 +63,10 @@ class Game
 
     puts Display.play_again
     user_input = Input.yes_or_no
-    run if user_input == 'yes'
+    if user_input == 'yes'
+      self.hangman = Hangman.new
+      run
+    end
     puts Display.quit if user_input == 'no'
   end
 
