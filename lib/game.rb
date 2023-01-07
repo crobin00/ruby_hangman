@@ -73,7 +73,7 @@ class Game
   def game_state
     puts
     puts hangman.current_guess_string
-    puts "Letters guessed: #{hangman.all_guesses_string}"
+    puts "Letters guessed: #{Display.all_guesses(hangman.all_guesses_string, hangman.current_guess_string)}"
     if hangman.guesses_remaining == 1
       puts 'Last guess!'
     else

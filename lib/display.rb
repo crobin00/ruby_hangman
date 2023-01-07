@@ -1,28 +1,30 @@
 # frozen_string_literal: true
 
 require_relative 'files'
+require_relative 'formatting'
 
 module Display
   def self.print_welcome
     <<~HEREDOC
-    Welcome to Hangman! Type 'quit' at any time if you wish to stop playing.
-    While playing, enter 'save' to save the current game to come back later.
+    Welcome to Hangman! Type '#{Formatting.red('quit')}' at any time if you wish to stop playing.
+    While playing, enter '#{Formatting.blue('save')}' to save the current game to come back later.
+
     HEREDOC
   end
 
   def self.ask_load_previous
     <<~HEREDOC
     Would you like to load a previous game?
-    Enter 'yes' or 'no': 
+    Enter #{Formatting.green('yes')} or #{Formatting.green('no')}: 
     HEREDOC
   end
 
   def self.current_save_files
     <<~HEREDOC
     Here are your current save files:
-    #{Files.all_files.join(' ')}
+    #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
     What is the file you would like to load?
-    Enter file name or \'new\' to start a new game: 
+    Enter a #{Formatting.cyan('file name')} or '#{Formatting.cyan('new')}' to start a new game: 
     HEREDOC
   end
 
@@ -31,7 +33,7 @@ module Display
   end
 
   def self.letter_input
-    'Enter a letter or \'save\': '
+    "Enter a #{Formatting.magenta('letter')} or \'#{Formatting.blue('save')}\': "
   end
 
   def self.saved_game_as
@@ -41,24 +43,24 @@ module Display
   def self.play_again
     <<~HEREDOC
     Would you like to play again?
-    Enter 'yes' or 'no': 
+    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
     HEREDOC
   end
 
   def self.yes_or_no_invalid
-    'Invalid input. Enter \'yes\', \'no\', or \'quit\''
+    "Invalid input. Enter \'#{Formatting.green('yes')}\', \'#{Formatting.green('no')}\', or \'#{Formatting.red('quit')}\'"
   end
 
   def self.file_invalid
     <<~HEREDOC
     Invalid filename. Enter a filename from the following file names.
     #{Files.all_files.join(' ')}
-    Or type 'new' to start a new game or 'quit' to quit.
+    Or type 'new' to start a new game or '#{Formatting.red('quit')}' to quit.
     HEREDOC
   end
 
   def self.letter_invalid
-    'Invalid input. Enter a letter \'save\', or \'quit\'.'
+    "Invalid input. Enter a letter \'#{Formatting.blue('save')}\', or \'#{Formatting.red('quit')}\'."
   end
 
   def self.quit
@@ -83,7 +85,19 @@ module Display
   def self.play_again
     <<~HEREDOC
     Would you like to play again?
-    Enter 'yes' or 'no': 
+    Enter '#{Formatting.green('yes')}' or '#{Formatting.green('no')}': 
     HEREDOC
+  end
+
+  def self.all_guesses(all_guesses, current_guess)
+    formatted_string = ''
+    all_guesses.each_char do |char|
+      if current_guess.include?(char)
+        formatted_string += "#{Formatting.green(char)}"
+      else
+        formatted_string += "#{Formatting.red(char)}"
+      end
+    end
+    formatted_string
   end
 end
