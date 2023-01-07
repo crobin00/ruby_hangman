@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require_relative 'display'
 
 # Class for Hangman
 class Hangman
@@ -63,14 +64,14 @@ class Hangman
     Dir.mkdir('saves') unless Dir.exist?('saves')
     name = "#{all_words.sample}_#{all_words.sample}"
     file_name = "saves/#{name}.yaml"
-    puts "Saved game as: #{name}"
+    puts "#{Display.saved_game_as}#{name}"
     File.open(file_name, 'w') do |file|
       YAML.dump({
-        current_word_string: current_word_string,
-        current_guess_string: current_guess_string,
-        all_guesses_string: all_guesses_string,
-        guesses_remaining: guesses_remaining
-      }, file)
+                  current_word_string: current_word_string,
+                  current_guess_string: current_guess_string,
+                  all_guesses_string: all_guesses_string,
+                  guesses_remaining: guesses_remaining
+                }, file)
     end
   end
 

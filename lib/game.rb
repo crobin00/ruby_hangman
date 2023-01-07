@@ -1,148 +1,78 @@
 # frozen_string_literal: true
 
 require_relative 'hangman'
+require_relative 'display'
+require_relative 'input'
+require_relative 'files'
 
 # Class for Game
 class Game
-  attr_reader :hangman
+  attr_reader :hangman, :user_input
 
   def initialize
     @hangman = Hangman.new
+    @user_input = ''
   end
 
   def run
-    print_welcome
-
-    file = load_game
-    if file
-      hangman.load_game(file)
-      print_all_guesses
-      print_guesses_remaining
-    else
-      puts 'Your random word has been chosen'
+    puts Display.print_welcome
+    puts Display.ask_load_previous
+    user_input = Input.yes_or_no
+    if user_input == 'quit'
+      puts Display.quit
+      return
     end
 
-    print_current_guess
+    if user_input == 'yes'
+      unless Files.all_files.empty?
+        puts Display.current_save_files
+        user_input = Input.load
+        case user_input
+        when 'quit'
+          puts Display.quit
+          return
+        when 'new'
+          puts Display.random_word_chosen(hangman.current_word_string.length)
+        else
+          hangman.load_game(user_input)
+        end
+      end
+    else
+      puts Display.random_word_chosen(hangman.current_word_string.length)
+    end
 
     until hangman.game_over?
-      user_input = input
-      puts
-      break if user_input == 'quit'
-
-      if user_input == 'save'
+      puts game_state
+      puts Display.letter_input
+      user_input = Input.letter_input
+      case user_input
+      when 'quit'
+        puts Display.quit
+        return
+      when 'save'
         hangman.save_game
-        break
+        return
+      else
+        hangman.make_guess(user_input)
       end
-
-      # If input in current guess or incorrect guesses, enter new char
-      if hangman.previously_guessed?(user_input)
-        puts 'You already guessed that letter. Try again.'
-        next
-      end
-
-      print_guess_feedback(user_input)
-
-      # Guessed correct word
-      if hangman.guessed_word?
-        puts 'You guessed the word!'
-        break
-      end
-
-      # Break if out of guesses
-      if hangman.guesses_remaining.zero?
-        print_out_of_guesses
-        break
-      end
-
-      print_all_guesses
-      print_guesses_remaining
-      print_current_guess
     end
+
+    puts Display.no_guesses_remaining(hangman.current_word_string) if hangman.guesses_remaining.zero?
+    puts Display.guessed_word if hangman.guessed_word?
+
+    puts Display.play_again
+    user_input = Input.yes_or_no
+    run if user_input == 'yes'
+    puts Display.quit if user_input == 'no'
   end
 
-  private
-
-  def print_welcome
-    puts 'Welcome to Hangman! Type \'quit\' at any time if you wish to stop playing.'
-  end
-
-  def print_all_guesses
-    puts "Letters guessed: #{hangman.all_guesses_string}"
-  end
-
-  def print_current_guess
+  def game_state
     puts hangman.current_guess_string
-  end
-
-  def print_guess_feedback(user_input)
-    if hangman.make_guess(user_input)
-      puts 'Good guess!'
-    else
-      puts 'Incorrect guess!'
-    end
-  end
-
-  def print_out_of_guesses
-    puts 'Out of guesses!'
-    puts 'Correct word was:'
-    puts hangman.current_word_string
-  end
-
-  def print_guesses_remaining
+    puts "Letters guessed: #{hangman.all_guesses_string}"
     if hangman.guesses_remaining == 1
       puts 'Last guess!'
     else
       puts "Incorrect guesses remaining: #{hangman.guesses_remaining}"
     end
-  end
-
-  def input
-    loop do
-      print 'Enter a letter or \'save\' to save current game: '
-      user_input = gets.chomp.downcase
-      return user_input if (user_input.length == 1 && alpha?(user_input)) ||
-                           user_input == 'quit' || user_input == 'save'
-
-      puts 'Invalid input. Please enter one letter'
-    end
-  end
-
-  def load_game
-    loop do
-      puts 'Would you like to load a previous game?'
-      print 'Enter \'yes\' or \'no\': '
-      user_input = gets.chomp.downcase
-      return false if user_input == 'no'  
-      return get_file if user_input == 'yes'
-      puts 'Invalid input.'
-    end
-  end
-
-  def get_file
-    files_names = []
-    if Dir.empty?('saves')
-      puts 'No saves available'
-      return false
-    end
-
-    puts 'Files: '
-    Dir.each_child('saves') do |file|
-      base_name = File.basename(file, '.yaml')
-      files_names.push(base_name)
-      puts base_name
-    end
-
-    loop do
-      print 'What is the file name?'
-      user_input = gets.chomp.downcase
-      return user_input if files_names.include?(user_input)
-
-      puts 'Invalid file.'
-    end
-  end
-
-  def alpha?(char)
-    (char >= 'a' && char <= 'z') ||
-      (char >= 'A' && char <= 'Z')
   end
 end
