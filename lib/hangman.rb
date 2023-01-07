@@ -2,6 +2,7 @@
 
 require 'yaml'
 require_relative 'display'
+require_relative 'formatting'
 
 # Class for Hangman
 class Hangman
@@ -14,7 +15,7 @@ class Hangman
     @valid_words = []
     read_all_valid_words
     @current_word = valid_words.sample.split('')
-    @current_guess = Array.new(current_word.length, '-')
+    @current_guess = Array.new(current_word.length, '_')
     @all_guesses = []
     @guesses_remaining = 7
     p current_word
@@ -64,7 +65,7 @@ class Hangman
     Dir.mkdir('saves') unless Dir.exist?('saves')
     name = "#{all_words.sample}_#{all_words.sample}"
     file_name = "saves/#{name}.yaml"
-    puts "#{Display.saved_game_as}#{name}"
+    puts "#{Display.saved_game_as}#{Formatting.magenta(Formatting.bold(name))}"
     File.open(file_name, 'w') do |file|
       YAML.dump({
                   current_word_string: current_word_string,

@@ -71,6 +71,7 @@ class Game
   end
 
   def game_state
+    puts
     puts hangman.current_guess_string
     puts "Letters guessed: #{hangman.all_guesses_string}"
     if hangman.guesses_remaining == 1
