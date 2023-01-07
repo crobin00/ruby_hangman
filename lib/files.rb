@@ -5,7 +5,7 @@ require_relative 'display'
 module Files
   def self.all_files
     file_names = []
-    if Dir.empty?('saves')
+    if !Dir.exist?('saves') || Dir.empty?('saves')
       puts Display.no_saves
       return file_names
     end
