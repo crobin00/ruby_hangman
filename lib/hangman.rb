@@ -18,7 +18,6 @@ class Hangman
     @current_guess = Array.new(current_word.length, '_')
     @all_guesses = []
     @guesses_remaining = 7
-    p current_word
   end
 
   def make_guess(user_input)
@@ -79,7 +78,6 @@ class Hangman
   def load_game(file)
     file_name = "saves/#{file}.yaml"
     data = YAML.load File.read(file_name)
-    p data
     self.current_word = data[:current_word_string].split('')
     self.current_guess = data[:current_guess_string].split('')
     self.all_guesses = data[:all_guesses_string].split(' ')
