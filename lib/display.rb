@@ -27,7 +27,7 @@ module Display
     #{Formatting.magenta(Formatting.bold(Files.all_files.join(' ')))}
     What is the file you would like to load?
     Enter a #{Formatting.cyan('file name')} or '#{Formatting.cyan('new')}' to start a new game: 
-    
+
     HEREDOC
   end
 
@@ -72,6 +72,10 @@ module Display
 
   def self.no_saves
     'No saves available'
+  end
+
+  def self.previously_guessed
+    'Letter was previously guessed. Enter a new letter.'
   end
 
   def self.no_guesses_remaining(word)

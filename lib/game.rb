@@ -46,6 +46,11 @@ class Game
       puts game_state
       puts Display.letter_input
       user_input = Input.letter_input
+      if hangman.previously_guessed?(user_input)
+        puts Display.previously_guessed
+        next
+      end
+
       case user_input
       when 'quit'
         puts Display.quit
